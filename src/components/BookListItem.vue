@@ -1,0 +1,70 @@
+<template>
+  <div class="book-item">
+    <div class="book-item__content">
+      <div class="book-item__content__title">
+        {{ props.book.title }}
+      </div>
+      <div class="book-item__content__author">
+        By: {{ props.book.authorName }}
+      </div>
+    </div>
+    <div class="book-item__img-container">
+      <div
+        class="book-item__img"
+        :style="{ 'background-image': `url(${props.book.imageUrl})` }"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { withDefaults, defineProps } from 'vue'
+import type { bookApi } from '../types/books'
+const props = withDefaults(defineProps<{ book: bookApi }>(), {
+  book: () => ({
+    authorName: '',
+    imageUrl: '',
+    title: '',
+  }),
+})
+</script>
+
+<style lang="sass" scoped>
+.book-item
+  display: flex
+  flex-direction: row-reverse
+  align-items: center
+  width: 100%
+  padding: 0 15px
+  margin-bottom: 50px
+
+  &__img-container
+    border-radius: 15px
+    background-image: linear-gradient(45deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)
+    box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.5)
+    position: relative
+
+  &__img
+    width: 150px
+    height: 150px
+    background-repeat: no-repeat
+    background-size: contain
+    background-position: center
+
+  &__content
+    display: flex
+    flex-direction: column
+    justify-content: center
+    background-image: linear-gradient(0deg, #cbcbcb 0%, #fff 100%)
+    min-height: 100px
+    max-height: 150px
+    flex: 1
+    border-radius: 0 15px 15px 0
+    box-shadow: 0px 7px 7px 0px rgba(0,0,0,0.5)
+    padding: 15px 20px 15px 40px
+    transform: translateX(-20px)
+
+    &__title
+      font-weight: 700
+      margin-bottom: 5px
+</style>
