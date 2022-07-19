@@ -13,7 +13,7 @@
           :href="getGoogleLink(props.book)"
           target="_blank"
         >
-          Shop in google
+          Shop with google
         </a>
       </div>
     </div>
