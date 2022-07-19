@@ -38,12 +38,10 @@ const props = withDefaults(defineProps<{ book: bookApi }>(), {
 })
 
 function getGoogleLink(bookObj: bookApi) {
-  const title = bookObj.title
-    .replace(/ /g, '+')
-    .replace(/,/g, '')
-    .replace(/#/g, '%23')
-  const author = bookObj.authorName.replace(/ /g, '+')
-  return `https://www.google.com/search?q=book+${title}+by+${author}&tbm=shop`
+  const googleQuery = encodeURIComponent(
+    `book ${bookObj.title} by ${bookObj.authorName}`,
+  )
+  return `https://www.google.com/search?q=${googleQuery}&tbm=shop`
 }
 </script>
 
