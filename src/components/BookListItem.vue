@@ -7,13 +7,15 @@
       <div class="book-item__content__author">
         <span> By: {{ props.book.authorName }}</span>
       </div>
-      <a
-        class="book-item__link"
-        :href="getGoogleLink(props.book)"
-        target="_blank"
-      >
-        Shop in google
-      </a>
+      <div class="book-item__content__action">
+        <a
+          class="book-item__link"
+          :href="getGoogleLink(props.book)"
+          target="_blank"
+        >
+          Shop in google
+        </a>
+      </div>
     </div>
     <div class="book-item__img-container">
       <div
@@ -41,7 +43,7 @@ function getGoogleLink(bookObj: bookApi) {
     .replace(/,/g, '')
     .replace(/#/g, '%23')
   const author = bookObj.authorName.replace(/ /g, '+')
-  return `https://www.google.com/search?q=${title}+by+${author}&tbm=shop`
+  return `https://www.google.com/search?q=book+${title}+by+${author}&tbm=shop`
 }
 </script>
 
@@ -90,9 +92,13 @@ function getGoogleLink(bookObj: bookApi) {
       flex-wrap: wrap
       align-items: end
 
+    &__action
+      display: flex
+      justify-content: end
+
   &__link
     font-size: 0.7rem
     text-decoration: none
     font-weight: 400
-    text-align: right
+    color: #4B5C94
 </style>
