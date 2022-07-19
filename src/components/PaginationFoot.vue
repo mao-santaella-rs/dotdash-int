@@ -109,6 +109,8 @@ const computedNumbers = computed(() => {
       font-weight: 700
     &--dots
       pointer-events: none
+    @media (max-width: 425px)
+      padding: 15px 10px
 
   &__arrow
     width: 15px

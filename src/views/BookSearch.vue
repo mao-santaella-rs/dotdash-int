@@ -105,27 +105,28 @@ body
   justify-content: center
   flex-direction: column
   &__bar
-    height: 70px
     display: flex
     margin: 100px 0
     position: relative
+    width: 90%
+    justify-content: center
 
     & > *
-
       position: relative
 
     input
       display: block
       padding: 10px 20px 13px
       box-sizing: border-box
-      height: 100%
+      height: 70px
       font-size: 1.5rem
       border-radius: 20px 0 0 20px
       border: none
       color: #1D223A
       box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.3)
-      width: 400px
+      max-width: 400px
       transition: box-shadow 0.2s ease-in-out
+      flex: 1 0 0%
 
       &:focus-visible
         border: none
@@ -136,7 +137,7 @@ body
       display: block
       box-sizing: border-box
       font-size: 1.5rem
-      height: 100%
+      height: 70px
       padding: 5px 30px
       border: none
       border-radius: 0 20px 20px 0
@@ -147,6 +148,8 @@ body
       position: relative
       overflow: hidden
       cursor: pointer
+      flex: 0 0 auto
+      width: auto
       span
         font-weight: 400
         text-shadow: 0px 1px 2px rgba(0,0,0,0.3)
@@ -164,6 +167,15 @@ body
         &:before
           opacity: 1
 
+    @media (max-width: 425px)
+      flex-wrap: wrap
+      input
+        border-radius: 15px
+      button
+        height: 50px
+        border-radius: 0 0 20px 20px
+
+
     &__hint
       position: absolute
       bottom: 0
@@ -177,10 +189,20 @@ body
     max-width: 1100px
     display: flex
     flex-wrap: wrap
+    justify-content: center
     padding: 0 30px
 
     & >div
-      flex: 50%
+      flex: 0 0 auto
+      width: 50%
+
+    @media (max-width: 1024px)
+      padding: 0 0 0 15px
+      & >div
+        width: 80%
+    @media (max-width: 768px)
+      & >div
+        width: 100%
 
 
 @keyframes show-hint

@@ -52,7 +52,7 @@ function getGoogleLink(bookObj: bookApi) {
   display: flex
   flex-direction: row-reverse
   align-items: center
-  width: 100%
+  // width: 100%
   padding: 0 15px
   margin-bottom: 50px
 
@@ -75,9 +75,9 @@ function getGoogleLink(bookObj: bookApi) {
     justify-content: center
     background-image: linear-gradient(0deg, #cbcbcb 0%, #fff 100%)
     min-height: 100px
-    max-height: 150px
+    // max-height: 150px
     flex: 1
-    border-radius: 0 15px 15px 0
+    border-radius: 15px
     box-shadow: 0px 7px 7px 0px rgba(0,0,0,0.5)
     padding: 15px 20px 15px 40px
     transform: translateX(-20px)
@@ -101,4 +101,12 @@ function getGoogleLink(bookObj: bookApi) {
     text-decoration: none
     font-weight: 400
     color: #4B5C94
+
+
+  @media (max-width: 425px)
+    // align-items: start
+
+    &__img
+      width: 100px
+      height: 100px
 </style>
