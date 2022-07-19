@@ -5,8 +5,15 @@
         {{ props.book.title }}
       </div>
       <div class="book-item__content__author">
-        By: {{ props.book.authorName }}
+        <span> By: {{ props.book.authorName }}</span>
       </div>
+      <a
+        class="book-item__link"
+        :href="getGoogleLink(props.book)"
+        target="_blank"
+      >
+        Shop in google
+      </a>
     </div>
     <div class="book-item__img-container">
       <div
@@ -27,6 +34,15 @@ const props = withDefaults(defineProps<{ book: bookApi }>(), {
     title: '',
   }),
 })
+
+function getGoogleLink(bookObj: bookApi) {
+  const title = bookObj.title
+    .replace(/ /g, '+')
+    .replace(/,/g, '')
+    .replace(/#/g, '%23')
+  const author = bookObj.authorName.replace(/ /g, '+')
+  return `https://www.google.com/search?q=${title}+by+${author}&tbm=shop`
+}
 </script>
 
 <style lang="sass" scoped>
@@ -67,4 +83,16 @@ const props = withDefaults(defineProps<{ book: bookApi }>(), {
     &__title
       font-weight: 700
       margin-bottom: 5px
+
+    &__author
+      display: flex
+      justify-content: space-between
+      flex-wrap: wrap
+      align-items: end
+
+  &__link
+    font-size: 0.7rem
+    text-decoration: none
+    font-weight: 400
+    text-align: right
 </style>

@@ -1,16 +1,21 @@
 <template>
   <div class="search">
     <div class="search__bar">
-      <input type="text" v-model="term" @keyup.enter="onSearch" />
+      <div v-if="inputIsFocus" class="search__bar__hint">
+        Press Enter to search
+      </div>
+      <input
+        type="text"
+        v-model="term"
+        ref="searchInput"
+        @keyup.enter="onSearch"
+        @focus="inputIsFocus = true"
+        @blur="inputIsFocus = false"
+      />
       <button @click="onSearch">
         <span>Search</span>
       </button>
     </div>
-    <PaginationFoot
-      v-model="page"
-      :responseTotalItems="20"
-      :totalItems="bookApiResponse?.total"
-    />
     <div v class="search__results">
       <BookListItem
         v-for="(book, index) in bookList"
@@ -18,24 +23,36 @@
         :key="book.imageUrl + index"
       />
     </div>
+    <PaginationFoot
+      v-if="bookApiResponse?.total"
+      v-model="page"
+      :responseTotalItems="20"
+      :totalItems="bookApiResponse.total"
+    />
   </div>
+  <BookSearchLoader v-if="isLoading" />
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+// type imports
+import type { BookApiResponse } from '../types/books'
+// component imports
 import BookListItem from '@/components/BookListItem.vue'
 import PaginationFoot from '../components/PaginationFoot.vue'
-import type { BookApiResponse } from '../types/books'
+import BookSearchLoader from '@/components/BookSearchLoader.vue'
 
 // search
+const searchInput = ref<HTMLInputElement | null>(null)
 const term = ref('')
 const bookApiResponse = ref<BookApiResponse>()
-const bookList = computed(() => {
-  return bookApiResponse.value?.list
-})
+const bookList = computed(() => bookApiResponse.value?.list)
+const inputIsFocus = ref(false)
+const isLoading = ref(false)
 
 function onSearch() {
   if (term.value.length) {
+    page.value = 1
     getBookListByTerm(term.value, { page: 1 })
   }
 }
@@ -45,12 +62,8 @@ const page = ref(1)
 
 watch(page, (newVal, oldVal) => {
   if (newVal === oldVal) return
-  paginationSearch()
+  getBookListByTerm(term.value, { page: newVal })
 })
-
-function paginationSearch() {
-  getBookListByTerm(term.value, { page: page.value })
-}
 
 // fetch
 function getQuery(argObj: object = {}) {
@@ -62,6 +75,8 @@ function getQuery(argObj: object = {}) {
 }
 
 function getBookListByTerm(term: string, queryObj: object = {}) {
+  searchInput.value?.blur()
+  isLoading.value = true
   const query = getQuery(queryObj)
   return fetch(
     `https://goodreads-server-express--dotdash.repl.co/search/${term}?${query}`,
@@ -72,7 +87,7 @@ function getBookListByTerm(term: string, queryObj: object = {}) {
     .then((response) => response.json())
     .then((result) => {
       bookApiResponse.value = result
-      console.log(result)
+      isLoading.value = false
     })
     .catch((error) => console.error('error', error))
 }
@@ -93,6 +108,11 @@ body
     height: 70px
     display: flex
     margin: 100px 0
+    position: relative
+
+    & > *
+
+      position: relative
 
     input
       display: block
@@ -105,6 +125,12 @@ body
       color: #1D223A
       box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.3)
       width: 400px
+      transition: box-shadow 0.2s ease-in-out
+
+      &:focus-visible
+        border: none
+        outline: none
+        box-shadow: 0px 0px 10px 0px rgba(255,255,255,0.5)
 
     button
       display: block
@@ -138,6 +164,14 @@ body
         &:before
           opacity: 1
 
+    &__hint
+      position: absolute
+      bottom: 0
+      left: 50%
+      color: #7d8dc1
+      transform: translate(-50%,0)
+      animation: show-hint 0.1s ease-in-out forwards
+
   &__results
     width: 100%
     max-width: 1100px
@@ -147,4 +181,11 @@ body
 
     & >div
       flex: 50%
+
+
+@keyframes show-hint
+  0%
+    transform: translate(-50%,0)
+  100%
+    transform: translate(-50%,25px)
 </style>
