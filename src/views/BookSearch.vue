@@ -17,17 +17,12 @@
       </button>
     </div>
     <div v class="search__results">
-      <BookListItem
-        v-for="(book, index) in bookList"
-        :book="book"
-        :key="book.imageUrl + index"
-      />
+      <BookListItem v-for="book in bookList" :book="book" :key="book.id" />
     </div>
     <PaginationFoot
       v-if="bookApiResponse?.total"
       v-model="page"
-      :responseTotalItems="20"
-      :totalItems="bookApiResponse.total"
+      :paginationObj="bookApiResponse.pagination"
     />
   </div>
   <BookSearchLoader v-if="isLoading" />
@@ -79,7 +74,7 @@ function getBookListByTerm(term: string, queryObj: object = {}) {
   isLoading.value = true
   const query = getQuery(queryObj)
   return fetch(
-    `https://goodreads-server-express--dotdash.repl.co/search/${term}?${query}`,
+    `https://runkit.io/mao-santaella/book-api/1.0.0/search/${term}?${query}`,
     {
       method: 'GET',
     },

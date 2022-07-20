@@ -28,16 +28,17 @@
 
 <script setup lang="ts">
 import { withDefaults, defineProps } from 'vue'
-import type { bookApi } from '../types/books'
-const props = withDefaults(defineProps<{ book: bookApi }>(), {
+import type { BookApi } from '../types/books'
+const props = withDefaults(defineProps<{ book: BookApi }>(), {
   book: () => ({
+    id: 0,
     authorName: '',
     imageUrl: '',
     title: '',
   }),
 })
 
-function getGoogleLink(bookObj: bookApi) {
+function getGoogleLink(bookObj: BookApi) {
   const googleQuery = encodeURIComponent(
     `book ${bookObj.title} by ${bookObj.authorName}`,
   )

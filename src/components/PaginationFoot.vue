@@ -1,9 +1,9 @@
 <template>
   <div class="pagination">
     <div
-      v-if="modelValue > 1"
+      v-if="paginationObj.previous_page"
       class="pagination__arrow pagination__arrow--left"
-      @click="$emit('update:modelValue', modelValue - 1)"
+      @click="$emit('update:modelValue', paginationObj.previous_page)"
     />
     <template v-for="number in computedNumbers" :key="`number-${number}`">
       <div
@@ -22,9 +22,9 @@
       </div>
     </template>
     <div
-      v-if="modelValue != totalPages"
+      v-if="paginationObj.next_page"
       class="pagination__arrow pagination__arrow--right"
-      @click="$emit('update:modelValue', modelValue + 1)"
+      @click="$emit('update:modelValue', paginationObj.next_page)"
     />
   </div>
 </template>
@@ -33,28 +33,20 @@
 import { defineProps, computed } from 'vue'
 const props = defineProps({
   modelValue: { type: Number, required: true },
-  responseTotalItems: Number,
-  totalItems: Number,
-})
-
-const totalPages = computed(() => {
-  const { totalItems, responseTotalItems } = props
-  if (totalItems && responseTotalItems) {
-    return Math.round(totalItems / responseTotalItems)
-  }
-  return 0
+  paginationObj: { type: Object, required: true },
 })
 
 const computedNumbers = computed(() => {
-  if (totalPages.value) {
+  const totalPages = props.paginationObj.total_pages
+  if (totalPages) {
     const maxAmmount = 4
     const finalArr: number[] = []
-    if (totalPages.value > maxAmmount * 2) {
+    if (totalPages > maxAmmount * 2) {
       const pageSelected = props.modelValue
       const initialNumber =
         pageSelected >= maxAmmount
-          ? pageSelected > totalPages.value - maxAmmount + 1
-            ? totalPages.value - maxAmmount + 1
+          ? pageSelected > totalPages - maxAmmount + 1
+            ? totalPages - maxAmmount + 1
             : pageSelected - 1
           : 1
 
@@ -71,16 +63,16 @@ const computedNumbers = computed(() => {
         finalArr.push(number)
       }
 
-      if (initialNumber + maxAmmount < totalPages.value) {
+      if (initialNumber + maxAmmount < totalPages) {
         finalArr.push(0)
       }
-      if (initialNumber + maxAmmount <= totalPages.value) {
-        finalArr.push(totalPages.value)
+      if (initialNumber + maxAmmount <= totalPages) {
+        finalArr.push(totalPages)
       }
 
       return finalArr
     } else {
-      for (let number = 1; number <= totalPages.value; number++) {
+      for (let number = 1; number <= totalPages; number++) {
         finalArr.push(number)
       }
     }
